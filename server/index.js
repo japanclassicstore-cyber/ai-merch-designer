@@ -7,14 +7,18 @@ require('dotenv').config();
 
 const app = express();
 
+const { MONGODB_URI } = process.env;
+
+if (!MONGODB_URI) {
+  throw new Error('Missing MONGODB_URI environment variable. Set it in server/.env before starting the server.');
+}
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://kimiClaw:Y7sKUHDBSwmafaRm@cluster3.7mxgj4n.mongodb.net/kimiclaw';
-
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.error('❌ MongoDB Error:', err));
